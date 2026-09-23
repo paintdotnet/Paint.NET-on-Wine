@@ -47,7 +47,7 @@ Over time, some of these "quirks modes" may no longer be necessary, in which cas
 
 ## Links
 - Paint.NET-on-Wine GitHub (releases and issue tracking): https://github.com/paintdotnet/Paint.NET-on-Wine
-- @bluesillybeard's Paint.NETOnWine GitHub repository for upstream Wine patches: https://github.com/paintdotnet/Paint.NET-on-Wine
+- @bluesillybeard's Paint.NETOnWine GitHub repository for upstream Wine patches: https://github.com/bluesillybeard/Paint.NETOnWine
 - Paint.NET website: https://paint.net
 - Paint.NET forum: https://forums.paint.net
 - Paint.NET blog: https://blog.paint.net
