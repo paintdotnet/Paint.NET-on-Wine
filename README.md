@@ -7,10 +7,13 @@ When or if things move past "experimental," some kind of announcement will be ma
 
 Builds of Paint.NET-on-Wine will expire 12 weeks after their build date. You'll need to get the latest version when that happens. This helps to ensure that old, stale, buggy builds do not survive out in the wild, and reduces time wasted on reporting and triaging things that have already been fixed. The expiration date is displayed near the top of Settings → Diagnostics.
 
-## Installation
+## Download
+Grab the latest build on the Releases page: https://github.com/paintdotnet/Paint.NET-on-Wine/releases
+
+## Install
 Run `./install.sh`. It will (hopefully) set things up properly and make sure Wine and DXVK are installed, etc.
 
-## Running
+## Run
 Run `./paintdotnet.sh`. It will check some things and then launch `paintdotnet.exe` using Wine.
 
 ## Report Bugs
