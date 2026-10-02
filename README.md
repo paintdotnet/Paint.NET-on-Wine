@@ -25,15 +25,23 @@ Before reporting anything, make sure you're using the latest versions of things 
 The best place for discussing Paint.NET-on-Wine is on the Paint.NET Discord server in the `#pdn-on-wine` channel: https://discord.gg/nk7CVDb52
 
 ## Technical Details
-"Wine mode" is enabled via the `EnableWineMode` property in `PaintDotNet.Configuration.json`. This is automatically set for the Paint.NET-on-Wine package.
+Paint.NET does not automatically detect Wine. Instead, "Wine mode" is enabled via the `EnableWineMode` property in `PaintDotNet.Configuration.json`. This is set to `true` for the Paint.NET-on-Wine package.
 
 When running Paint.NET in "Wine mode," a few things are different than on native Windows. These avoid holes in Wine that prevent Paint.NET from working:
 
 - The native Direct2D (`d2d1.dll`) is replaced with a from-scratch implementation written in C# that lives in `PaintDotNet.Windows.Direct2D1.Managed.dll`.
-- [DWriteCore](https://learn.microsoft.com/en-us/windows/win32/directwrite/dwritecore-overview) (`dwritecore.dll`) is used instead of the built-in DirectWrite (`dwrite.dll`). DWriteCore is an official version of DirectWrite that is redistributable and intended for cross-platform scenarios. This removes Wine's implementation of DirectWrite as a dependency. If you'd like to test using the built-in DirectWrite, use the `/useNativeDWrite` command-line parameter.
-- The use of Windows Animation Manager (`UIAnimation.dll`) is disabled. An internal "null" implementation is used instead. This means no UI animations like fades and slides, and only a static selection outline.
+- [DWriteCore](https://learn.microsoft.com/en-us/windows/win32/directwrite/dwritecore-overview) (`dwritecore.dll`) is used instead of the system-wide DirectWrite (`dwrite.dll`).
+  - DWriteCore is an official version of DirectWrite that is redistributable and intended for cross-platform or down-level scenarios. This removes Wine's implementation of DirectWrite as a dependency and ensures text rendering is consistent and stable.
+  - If you'd like to test using the system-wide DirectWrite instead, use the `/useNativeDWrite` command-line parameter.
+- Google's [Noto Color Emoji](https://github.com/googlefonts/noto-emoji) font is used for emoji fallback rendering. Segoe UI Emoji usually takes on this role in Windows so that emojis can be used even if a font doesn't support them.
+  - If you prefer to use a different font for this purpose, it can be configured in the `PaintDotNet.Configuration.json` file with the `DWriteCoreFallbackFontFileName` and `DWriteCoreFallbackFontFamily` properties. 
+  - `DWriteCoreFallbackFontFileName` is relative to the application directory. If the property is missing then font fallback will not be modified -- whatever Wine provides is what you'll get. This can be useful if you want to develop/test upstream font-related fixes for Wine.
+  - When `DWriteCoreFallbackFontFamily` is missing or empty, the first font family from the given font file will be used (the default value is an empty string).
+- The native Windows Animation Manager (`UIAnimation.dll`) is replaced with a from-scratch implementation written in C# that lives in `PaintDotNet.Windows.Animation.Managed.dll`.
+  - You can specify `/useNativeWAM` on the command-line if you'd rather use `UIAnimation.dll` instead. Wine's implementation is full of broken stubs, so this is meant for anyone who wants to work on fixing Wine's `UIAnimation.dll`.
 - The use of composition (`Windows.UI.Composition`, related to DirectComposition) is disabled. This prevents the use of a large memory usage optimization related to DXGI swapchain reuse, but doesn't affect correct operation of the app.
-- The use of Windows 11's `DisplayInformation` class. This prevents the detection of Wide Color Gamut mode, which is SDR + Automatic Color Management. Unless HDR mode is enabled and also works in Wine (which is unknown), Paint.NET will always operate in "sRGB mode." See the in-app Settings → Color Management for more information.
+- The use of Windows 11's `DisplayInformation` class is disabled. This prevents the detection of Wide Color Gamut mode, which is Automatic Color Management operating in SDR mode. Unless HDR mode is enabled and also works in Wine (which is unknown), Paint.NET will always operate in "sRGB mode." See the in-app Settings → Color Management for more information.
+- `GpuEffect` plugins that use [ComputeSharp](https://github.com/Sergio0694/ComputeSharp) are not supported yet. They work against Direct2D's native COM objects, so I just need to add CCW's (COM Callable Wrappers) for the managed Direct2D implementation.
 - Crash logs point at the GitHub repository linked above instead of the main crash log e-mail, and when the build expires it will also point to the GitHub repository instead of doing an update check and linking to the main website.
 - A wine glass emoji 🍷 is added to the title bar caption area.
 
