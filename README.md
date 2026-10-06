@@ -22,7 +22,7 @@ Please report bugs and other issues by creating an Issue on the GitHub page at h
 Before reporting anything, make sure you're using the latest versions of things like Wine and DXVK. As of September 2026, the absolute bare minimum version of Wine you'll need is 11.15.
 
 ## Discussion
-The best place for discussing Paint.NET-on-Wine is on the Paint.NET Discord server in the `#pdn-on-wine` channel: [https://discord.gg/nk7CVDb52](https://discord.gg/SMnDg99Mpb)
+The best place for discussing Paint.NET-on-Wine is on the Paint.NET Discord server in the `#pdn-on-wine` channel: https://discord.gg/SMnDg99Mpb
 
 ## Technical Details
 Paint.NET does not automatically detect Wine. Instead, "Wine mode" is enabled via the `EnableWineMode` property in `PaintDotNet.Configuration.json`. This is set to `true` for the Paint.NET-on-Wine package.
