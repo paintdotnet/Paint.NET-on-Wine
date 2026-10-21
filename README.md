@@ -19,7 +19,7 @@ Run `./paintdotnet.sh`. It will check some things and then launch `paintdotnet.e
 ## Report Bugs
 Please report bugs and other issues by creating an Issue on the GitHub page at https://github.com/paintdotnet/Paint.NET-on-Wine. They can't be fixed if you don't tell me about them -- I don't use Linux or Mac myself, so please don't assume that anything you bump into is "known" or "obvious."
 
-Before reporting anything, make sure you're using the latest versions of things like Wine and DXVK. As of September 2026, the absolute bare minimum version of Wine you'll need is 11.19.
+Before reporting anything, make sure you're using the latest versions of things like Wine and DXVK. The absolute bare minimum version of Wine you'll need is 11.20, at the time of this writing.
 
 ## Discussion
 The best place for discussing Paint.NET-on-Wine is on the Paint.NET Discord server in the `#pdn-on-wine` channel: https://discord.gg/SMnDg99Mpb
@@ -32,6 +32,11 @@ When running Paint.NET in "Wine mode," a few things are different than on native
 - "Glass" is disabled, which means that the image thumbnails at the top of the window will be smaller because they don't extend up into the caption area. 
   - You can use the `/enableGlass` command-line parameter if you want to work on fixing Wine's implementation of things like `DwmExtendFrameIntoClientArea`, `WM_NCCALCSIZE`, etc.
 - The native Direct2D (`d2d1.dll`) is replaced with a from-scratch implementation written in C# that lives in `PaintDotNet.Windows.Direct2D1.Managed.dll`.
+- WARP, Windows' software Direct3D device, does not exist in Wine, so Mesa's llvmpipe is used instead.
+  - DXVK's `IDXGIFactory::EnumWarpAdapter` just returns the first hardware GPU, which is problematic because it can cause major issues (crashing, huge memory consumption) with the way that Paint.NET creates multiple software devices.
+  - DXVK is thus configured to not hide other GPUs, and Paint.NET uses an alternate way of looking up a device for software rendering purposes.
+  - If you want DXVK's default behavior, modify `dxvk.conf` to remove `dxvk.deviceFilter`
+  - To use the default WARP device lookup behavior, add the `/disableDxgiAltWarpLookup` command-line argument.
 - [DWriteCore](https://learn.microsoft.com/en-us/windows/win32/directwrite/dwritecore-overview) (`dwritecore.dll`) is used instead of the system-wide DirectWrite (`dwrite.dll`).
   - DWriteCore is an official version of DirectWrite that is redistributable and intended for cross-platform or down-level scenarios. This removes Wine's implementation of DirectWrite as a dependency and ensures text rendering is consistent and stable.
   - If you'd like to test using the system-wide DirectWrite instead, use the `/useNativeDWrite` command-line parameter.
@@ -44,7 +49,6 @@ When running Paint.NET in "Wine mode," a few things are different than on native
   - You can specify `/useNativeWAM` on the command-line if you'd rather use `UIAnimation.dll` instead. Wine's implementation is full of broken stubs, so this is meant for anyone who wants to work on fixing Wine's `UIAnimation.dll`.
 - The use of composition (`Windows.UI.Composition`, related to DirectComposition) is disabled. This prevents the use of a large memory usage optimization related to DXGI swapchain reuse, but doesn't affect correct operation of the app.
   - You can specify `/enableComposition` to override this. Useful if you want to work on implementing Wine's support for `Windows.UI.Composition`.
-- The use of Windows 11's `DisplayInformation` class is disabled. This prevents the detection of Wide Color Gamut mode, which is Automatic Color Management operating in SDR mode. Unless HDR mode is enabled and also works in Wine (which is unknown), Paint.NET will always operate in "sRGB mode." See the in-app Settings → Color Management for more information.
 - `GpuEffect` plugins that use [ComputeSharp](https://github.com/Sergio0694/ComputeSharp) are not supported yet. They work against Direct2D's native COM objects, so I just need to add CCW's (COM Callable Wrappers) for the managed Direct2D implementation.
 - Crash logs point at the GitHub repository linked above instead of the main crash log e-mail, and when the build expires it will also point to the GitHub repository instead of doing an update check and linking to the main website.
 - A wine glass emoji 🍷 is added to the title bar caption area.
