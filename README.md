@@ -49,7 +49,6 @@ When running Paint.NET in "Wine mode," a few things are different than on native
   - You can specify `/useNativeWAM` on the command-line if you'd rather use `UIAnimation.dll` instead. Wine's implementation is full of broken stubs, so this is meant for anyone who wants to work on fixing Wine's `UIAnimation.dll`.
 - The use of composition (`Windows.UI.Composition`, related to DirectComposition) is disabled. This prevents the use of a large memory usage optimization related to DXGI swapchain reuse, but doesn't affect correct operation of the app.
   - You can specify `/enableComposition` to override this. Useful if you want to work on implementing Wine's support for `Windows.UI.Composition`.
-- `GpuEffect` plugins that use [ComputeSharp](https://github.com/Sergio0694/ComputeSharp) are not supported yet. They work against Direct2D's native COM objects, so I just need to add CCW's (COM Callable Wrappers) for the managed Direct2D implementation.
 - Crash logs point at the GitHub repository linked above instead of the main crash log e-mail, and when the build expires it will also point to the GitHub repository instead of doing an update check and linking to the main website.
 - A wine glass emoji 🍷 is added to the title bar caption area.
 
