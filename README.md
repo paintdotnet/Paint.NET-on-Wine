@@ -19,7 +19,7 @@ Run `./paintdotnet.sh`. It will check some things and then launch `paintdotnet.e
 ## Report Bugs
 Please report bugs and other issues by creating an Issue on the GitHub page at https://github.com/paintdotnet/Paint.NET-on-Wine. They can't be fixed if you don't tell me about them -- I don't use Linux or Mac myself, so please don't assume that anything you bump into is "known" or "obvious."
 
-Before reporting anything, make sure you're using the latest versions of things like Wine and DXVK. The absolute bare minimum version of Wine you'll need is 11.20, at the time of this writing.
+Before reporting anything, make sure you're using the latest versions of things like Wine and DXVK. The absolute bare minimum version of Wine you'll need is 11.21, at the time of this writing.
 
 ## Discussion
 The best place for discussing Paint.NET-on-Wine is on the Paint.NET Discord server in the `#pdn-on-wine` channel: https://discord.gg/SMnDg99Mpb
@@ -66,7 +66,7 @@ Over time, some of these "quirks modes" may no longer be necessary, in which cas
 
 ## Links
 - Paint.NET-on-Wine GitHub (releases and issue tracking): https://github.com/paintdotnet/Paint.NET-on-Wine
-- @bluesillybeard's Paint.NETOnWine GitHub repository for upstream Wine patches: https://github.com/bluesillybeard/Paint.NETOnWine
+- @bluesillybeard's Paint.NET-Wine-Patches GitHub repository for upstream Wine patches: https://github.com/bluesillybeard/Paint.NET-Wine-Patches
 - Paint.NET website: https://paint.net
 - Paint.NET forum: https://forums.paint.net
 - Paint.NET blog: https://blog.paint.net
